@@ -1,3 +1,10 @@
+"""
+Nosso Jogo foi feito utilizando a biblioteca rich para estilizar o console.
+Por Favor instale-a para o jogo funcionar:
+pip install rich
+Algum emoji, status ou cor pode não estar aparecendo corretamente, mas fizemos o possível para que funcionasse em todos os terminais.
+"""
+
 import random
 from time import sleep
 
@@ -52,7 +59,7 @@ FRASES_ACUSACAO_FALSA = [
     'Um silêncio constrangedor tomou o salão. {palpite} riu da sua cara: \'Eu? Jamais!\'. O verdadeiro culpado, {real}, aproveitou a confusão para escapar.',
     'Você prendeu {palpite}, mas na manhã seguinte outro crime aconteceu. O verdadeiro assassino era {real}. Sua carreira acabou.',
     'A multidão vaiou sua dedução. {palpite} é inocente. De longe, você viu {real} brindando com champagne, impune.',
-    'Você confrontou {palpite} publicamente, mas ele era inocente e acabou com vc na rima. Sua reputação está arruinada. O verdadeiro assassino era: {assassino}'
+    'Você confrontou {palpite} publicamente, mas ele era inocente e acabou com vc na rima. Sua reputação está arruinada. O verdadeiro assassino era: {real}'
 ]
 
 FRASES_MORTE = [
@@ -122,7 +129,7 @@ def carregar_cenario():
 
 
 def main():
-    c = Console(force_terminal=True)
+    c = Console(force_terminal=True, force_interactive=True)
     c.print(Panel(TEXTO_REGRAS, title="Briefing do Investigador", border_style="blue", box=box.ROUNDED))
     Confirm.ask("Pressione Enter para iniciar a investigação", console=c, show_default=False, default=True, show_choices=False)
     c.clear()
@@ -158,7 +165,7 @@ def main():
             prob_morte = min(PROBABILIDADE_MAXIMA_MORTE, prob_morte)
 
             c.rule(f"[bold blue]Dia {dia + 1}[/]")
-            stats_table = Table(show_header=True, header_style='bold white on deep_sky_blue1', box=box.SIMPLE_HEAD)
+            stats_table = Table(show_header=True, header_style='bold black on deep_sky_blue1', box=box.SIMPLE_HEAD)
             stats_table.add_column('Dia Atual', justify='center')
             stats_table.add_column('Investigações Restantes', justify='center')
             stats_table.add_column('Chance de Pista', justify='center')
@@ -296,7 +303,7 @@ if __name__ == '__main__':
         from rich.table import Table
         from rich import box
     except ImportError:
-        print('Por Favor, instale utilizada a biblioteca no projeto')
+        print('Por Favor, instale a biblioteca utilizada no projeto')
         print('pip install rich')
     else:
         main()
