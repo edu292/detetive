@@ -1,12 +1,5 @@
 import random
 from time import sleep
-from rich.console import Console
-from rich.status import Status
-from rich.panel import Panel
-from rich.text import Text
-from rich.prompt import IntPrompt, Confirm
-from rich.table import Table
-from rich import box
 
 PONTUACAO_MAXIMA = 1000
 PERSONAGENS = ['Neymar Jr.', 'Vini Jr.', 'Ana Castela', 'Vírgina', 'Zé Felipe', 'Bruna Biancardi', 'Bruna Marquezine']
@@ -87,12 +80,6 @@ FRASES_FIM_PRAZO = [
     'Acabou o prazo! A assessoria emitiu uma nota dizendo que \'o importante foi a experiência\' e te proibiu de continuar a investigação.'
 ]
 
-MAPA = Table(show_header=False, show_lines=True, title='Mapa do Cruzeiro', title_style='bold cyan')
-MAPA.add_row('Quarto do Neymar Jr.', 'Quarto do Vini Jr.', 'Quarto da Ana Castela')
-MAPA.add_row('Restaurante', 'Piscina Principal', 'Bar do Convés')
-MAPA.add_row('Salão de Jogos', 'Banheiros', 'Deck (Vista p/ Mar)')
-c = Console(force_terminal=True)
-
 TEXTO_REGRAS = f'''
 Você é um investigador especial da polícia e tem [bold yellow]{TOTAL_DE_DIAS} dias[/] para descobrir quem foi o assassino.\n
 [bold underline]DETALHES DA MISSÃO:[/]
@@ -101,7 +88,6 @@ Você é um investigador especial da polícia e tem [bold yellow]{TOTAL_DE_DIAS}
 • [bold red]CUIDADO![/] Investigações extras geram repercussão na mídia. A assessoria do Neymar não gosta disso, e o risco do assassino te notar aumenta a cada tentativa.\n
 [italic]Não deixe o assassino te encontrar primeiro...[/]
 '''
-BRIEFING_INVESTIGADOR = Panel(TEXTO_REGRAS, title="Briefing do Investigador", border_style="blue", box=box.ROUNDED)
 
 
 def carregar_cenario():
@@ -136,14 +122,14 @@ def carregar_cenario():
 
 
 def main():
-    c.print(BRIEFING_INVESTIGADOR)
+    c = Console(force_terminal=True)
+    c.print(Panel(TEXTO_REGRAS, title="Briefing do Investigador", border_style="blue", box=box.ROUNDED))
     Confirm.ask("Pressione Enter para iniciar a investigação", console=c, show_default=False, default=True, show_choices=False)
     c.clear()
     while True:
         assassino, contexto, pista_inicial, pistas = carregar_cenario()
         pistas_encontradas = [pista_inicial]
         c.print(Panel(Text('O Mistério no Cruzeiro', justify='center')))
-        c.print(MAPA, justify="center")
         c.print(Panel(contexto, title="O Crime", border_style="red", padding=(1, 2)))
 
         dia = 0
@@ -301,4 +287,16 @@ def main():
         c.clear()
 
 if __name__ == '__main__':
-    main()
+    try:
+        from rich.console import Console
+        from rich.status import Status
+        from rich.panel import Panel
+        from rich.text import Text
+        from rich.prompt import IntPrompt, Confirm
+        from rich.table import Table
+        from rich import box
+    except ImportError:
+        print('Por Favor, instale utilizada a biblioteca no projeto')
+        print('pip install rich')
+    else:
+        main()
